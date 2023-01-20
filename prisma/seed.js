@@ -97,6 +97,37 @@ async function createScreenings(screens, movies) {
     }
 }
 
+async function createSeating() {
+    const rawSeats = [
+        {
+            seatNum: 'G06', screen: {
+                connect: {
+                    id: screen.id
+                }
+            }
+        },
+        {
+            seatNum: 'H12', screen: {
+                connect: {
+                    id: screen.id
+                }
+            }
+        },
+    ];
+
+    const seats = [];
+
+    for (const rawSeat of rawSeats) {
+        const seat = await prisma.seating.create({ data: rawSeat });
+        seating.push(seat);
+    }
+
+    console.log('Seating created', seating);
+
+    return seats;
+}
+
+
 seed()
     .catch(async e => {
         console.error(e);
