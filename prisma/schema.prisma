@@ -73,7 +73,7 @@ model Ticket {
 
 model Seating {
   id        Int      @id @default(autoincrement())
-  seatNum   String   @db.VarChar(3)
+  seatNum   String   @db.VarChar(3) @unique
   screen    Screen   @relation(fields: [screenId], references: [id])
   screenId  Int
   ticket    Ticket[]
