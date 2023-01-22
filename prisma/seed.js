@@ -6,7 +6,7 @@ async function seed() {
   const movies = await createMovies();
   const screens = await createScreens();
   await createScreenings(screens, movies);
-  const seating = await createSeating();
+  //   const seating = await createSeating();
   const ticketWithSeating = await createTicketWitSeating();
 
   process.exit(0);
@@ -97,45 +97,60 @@ async function createScreenings(screens, movies) {
   }
 }
 
-async function createSeating() {
-  const rawSeats = [
-    {
-      seatNum: "G06",
-      screen: {
-        connect: {
-          id: screen.id,
-        },
-      },
-    },
-    {
-      seatNum: "H12",
-      screen: {
-        connect: {
-          id: screen.id,
-        },
-      },
-    },
-  ];
+// async function createSeating(screen) {
+//   const rawSeats = [
+//     {
+//       seatNum: "G06",
+//       screen: {
+//         connect: {
+//           id: 1,
+//         },
+//       },
+//     },
+//     {
+//       seatNum: "H12",
+//       screen: {
+//         connect: {
+//           id: 2,
+//         },
+//       },
+//     },
+//   ];
 
-  const seats = [];
+//   const seats = [];
 
-  for (const rawSeat of rawSeats) {
-    const seat = await prisma.seating.create({ data: rawSeat });
-    seating.push(seat);
-  }
+//   for (const rawSeat of rawSeats) {
+//     const seat = await prisma.seating.create({ data: rawSeat });
+//     seating.push(seat);
+//   }
 
-  console.log("Seating created", seating);
+//   console.log("Seating created", seating);
 
-  return seats;
-}
+//   return seats;
+// }
 
 async function createTicketWitSeating() {
   const ticketWithSeating = await prisma.ticket.create({
     data: {
-      screeningId: 2,
-      customerId: 1,
+      screening: {
+        connect: {
+          id: 1,
+        },
+      },
+      customer: {
+        connect: {
+          id: 1,
+        },
+      },
       seats: {
-        create: [{ seatNumber: "G06" }, { seatNumber: "H12" }],
+        create: {
+          seatNum: "G06",
+          screen: {
+            connect: {
+              id: 2,
+            },
+          },
+        },
       },
     },
   });

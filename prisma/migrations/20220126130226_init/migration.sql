@@ -64,11 +64,25 @@ CREATE TABLE "Ticket" (
     CONSTRAINT "Ticket_pkey" PRIMARY KEY ("id")
 );
 
+-- CreateTable
+CREATE TABLE "Seating" (
+    "id" SERIAL NOT NULL,
+    "seatNum" INTEGER NOT NULL,
+    "screenId" INTEGER NOT NULL,
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP(3) NOT NULL,
+
+    CONSTRAINT "Seating_pkey" PRIMARY KEY ("id")
+);
+
 -- CreateIndex
 CREATE UNIQUE INDEX "Contact_email_key" ON "Contact"("email");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "Contact_customerId_key" ON "Contact"("customerId");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "Seating_seatNum__key" ON "Seating"("seatNum");
 
 -- AddForeignKey
 ALTER TABLE "Contact" ADD CONSTRAINT "Contact_customerId_fkey" FOREIGN KEY ("customerId") REFERENCES "Customer"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
@@ -84,3 +98,6 @@ ALTER TABLE "Ticket" ADD CONSTRAINT "Ticket_screeningId_fkey" FOREIGN KEY ("scre
 
 -- AddForeignKey
 ALTER TABLE "Ticket" ADD CONSTRAINT "Ticket_customerId_fkey" FOREIGN KEY ("customerId") REFERENCES "Customer"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "Seating" ADD CONSTRAINT "Seating_screenId_fkey" FOREIGN KEY ("screenId") REFERENCES "Screen"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
