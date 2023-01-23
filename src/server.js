@@ -13,7 +13,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 // Add your router below
-const ticketRouter = require("./routers/ticket.js");
-app.use("/tickets", ticketRouter);
+const router = require("./router.js");
+app.use("/bookings", router);
 
 module.exports = app;

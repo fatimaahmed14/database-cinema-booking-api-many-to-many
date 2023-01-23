@@ -61,22 +61,31 @@ model Screening {
 }
 
 model Ticket {
-  id          Int       @id @default(autoincrement())
-  screening   Screening @relation(fields: [screeningId], references: [id])
+  id          Int           @id @default(autoincrement())
+  screening   Screening     @relation(fields: [screeningId], references: [id])
   screeningId Int
-  customer    Customer  @relation(fields: [customerId], references: [id])
+  customer    Customer      @relation(fields: [customerId], references: [id])
   customerId  Int
-  seats       Seating[]
-  createdAt   DateTime  @default(now())
-  updatedAt   DateTime  @updatedAt
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
+  TicketSeats TicketSeats[]
 }
 
 model Seating {
-  id        Int      @id @default(autoincrement())
-  seatNum   String   @db.VarChar(3) @unique
-  screen    Screen   @relation(fields: [screenId], references: [id])
-  screenId  Int
-  ticket    Ticket[]
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  id          Int           @id @default(autoincrement())
+  seatNum     String        @unique @db.VarChar(3)
+  screen      Screen        @relation(fields: [screenId], references: [id])
+  screenId    Int
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
+  TicketSeats TicketSeats[]
+}
+
+model TicketSeats {
+  ticket   Ticket  @relation(fields: [ticketId], references: [id])
+  ticketId Int
+  seat     Seating @relation(fields: [seatId], references: [id])
+  seatId   Int
+
+  @@id([ticketId, seatId])
 }

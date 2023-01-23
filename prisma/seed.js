@@ -6,8 +6,8 @@ async function seed() {
   const movies = await createMovies();
   const screens = await createScreens();
   await createScreenings(screens, movies);
-  //   const seating = await createSeating();
-  const ticketWithSeating = await createTicketWitSeating();
+  // const seating = await createSeating();
+  // const ticketWithSeating = await createTicketWitSeating();
 
   process.exit(0);
 }
@@ -61,8 +61,19 @@ async function createScreens() {
       data: rawScreen,
     });
 
-    console.log("Screen created", screen);
+    const seats = [];
 
+    for (let i = 0; i < 5; i++) {
+      const seat = await prisma.seat.create({
+        data: {
+          screenId: screen.id
+        }
+      });
+
+      seats.push(seat);
+    }
+    console.log("Screen created", screen);
+    screen.seats = seats;
     screens.push(screen);
   }
 
@@ -129,33 +140,33 @@ async function createScreenings(screens, movies) {
 //   return seats;
 // }
 
-async function createTicketWitSeating() {
-  const ticketWithSeating = await prisma.ticket.create({
-    data: {
-      screening: {
-        connect: {
-          id: 1,
-        },
-      },
-      customer: {
-        connect: {
-          id: 1,
-        },
-      },
-      seats: {
-        create: {
-          seatNum: "G06",
-          screen: {
-            connect: {
-              id: 2,
-            },
-          },
-        },
-      },
-    },
-  });
-  return ticketWithSeating;
-}
+// async function createTicketWitSeating() {
+//   const ticketWithSeating = await prisma.ticket.create({
+//     data: {
+//       screening: {
+//         connect: {
+//           id: 1,
+//         },
+//       },
+//       customer: {
+//         connect: {
+//           id: 1,
+//         },
+//       },
+//       seats: {
+//         create: {
+//           seatNum: "G06",
+//           screen: {
+//             connect: {
+//               id: 2,
+//             },
+//           },
+//         },
+//       },
+//     },
+//   });
+//   return ticketWithSeating;
+// }
 
 seed()
   .catch(async (e) => {
@@ -163,3 +174,4 @@ seed()
     await prisma.$disconnect();
   })
   .finally(() => process.exit(1));
+20030320
